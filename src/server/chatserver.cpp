@@ -4,7 +4,7 @@
 using namespace std;
 using namespace placeholders;
 
-// #include "chatservice.hpp"
+#include "chatservice.hpp"
 #include "chatserver.hpp"
 #include "json.hpp"
 using json = nlohmann::json;
@@ -47,11 +47,9 @@ void ChatServer::onMessage(const TcpConnectionPtr& conn,
                             Timestamp time)
 {
     cout << "In onMessage" << endl;
-    // string buf = buffer->retrieveAllAsString();
-    // cout << "buf solved" << endl;
-    // json js = json::parse(buf);
-    // cout << "js solved" << endl;
-    // // 根据js中的["msg_type"]，执行不同的handler（conn，js，time），实现网络模块和业务模块的解耦
-    // auto msgHandler = ChatService::getInstance()->getHandler(js["msg_type"].get<int>());
-    // msgHandler(conn, js, time);
+    string buf = buffer->retrieveAllAsString();
+    json js = json::parse(buf);
+    // 根据js中的["msg_type"]，执行不同的handler（conn，js，time），实现网络模块和业务模块的解耦
+    auto msgHandler = ChatService::getInstance()->getHandler(js["msg_type"].get<int>());
+    msgHandler(conn, js, time);
 }
